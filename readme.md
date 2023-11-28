@@ -36,7 +36,7 @@ or
 
 ## CNN概念圖
 
-![Alt text](ML_TCM_NN/CNN_explain.jpg)
+![Alt text](CNN_explain.jpg)
 
 ## 3 Layers of CNN
 
@@ -62,7 +62,7 @@ or
  pooled feature map ------->  a basic CNN 
 ```
 
-![Alt text](ML_TCM_NN/CNN_steps_explain.jpg)
+![Alt text](CNN_steps_explain.jpg)
 
 ## 例子
 
