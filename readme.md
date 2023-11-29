@@ -7,7 +7,13 @@ pip install -r requirements.txt
 # if use conda
 conda install --yes --file requirements.txt
 ```
+## fisrt runnable version with super simplified data
 
+`cnn_simplfied_data1.ipynb`
+
+## sample code (顯示tensorflow.keras 的NN model 怎麼用)
+
+`try_nn_1.ipynb`
 
 ## possible steps (???)
 
