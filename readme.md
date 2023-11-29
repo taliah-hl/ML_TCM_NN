@@ -1,9 +1,13 @@
 # NN Model for TCM Project (Group 13)
 
-## TO DO
+## install packages
+run
+```
+pip install -r requirements.txt
+# if use conda
+conda install --yes --file requirements.txt
+```
 
-了解package 的function 裡的 parameter是什麼
-研究如何應用在文本為主的csv檔上
 
 ## possible steps (???)
 
