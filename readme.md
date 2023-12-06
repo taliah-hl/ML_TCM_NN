@@ -17,10 +17,16 @@ conda install --yes --file requirements.txt
 ## train all medicine at one time (未完成)
 `cnn_simplified_data2 mulyi_classifer.ipynb`
 .
+
 .
+
 .
+
 .
+
+
 .
+
 .
 
 ## sample code (顯示tensorflow.keras 的NN model 怎麼用)
