@@ -11,6 +11,18 @@ conda install --yes --file requirements.txt
 
 `cnn_simplfied_data1.ipynb`
 
+## train one medicine each time
+`cnn_simplified_data2.ipynb`
+
+## train all medicine at one time (未完成)
+`cnn_simplified_data2 mulyi_classifer.ipynb`
+.
+.
+.
+.
+.
+.
+
 ## sample code (顯示tensorflow.keras 的NN model 怎麼用)
 
 `try_nn_1.ipynb`
