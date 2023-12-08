@@ -12,10 +12,16 @@ conda install --yes --file requirements.txt
 `cnn_simplfied_data1.ipynb`
 
 ## train one medicine each time
-`cnn_simplified_data2.ipynb`
+`one_medicine_vX.ipynb`
+- v1: train 所有藥
+- v2: 只train 出現次數多於250 的藥 (=剛好剩10種藥)
+- v3: v2 加入compute_sample_weight
+
 
 ## train all medicine at one time 
-`cnn_simplified_data2 multi_classifer.ipynb`
+`multi_classifer_vX.ipynb`
+
+- 未完成!!!
 
 ### Cheat sheet
 
