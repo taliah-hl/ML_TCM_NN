@@ -27,9 +27,12 @@ def dict_to_txt(dictToPrint: dict,  save_path:str=None, file_prefix: str='', tex
                 
             except:
                 print("cannot dump dictToPrint, use normal print")
+            
+                old_stdout = sys.stdout
                 sys.stdout = file
                 print(dictToPrint)
-                sys.stdout = sys.__stdout__  # Reset stdout to default (console)
+                sys.stdout = old_stdout  # Reset stdout to default (console)
+     
             try:
                 if textbox is not None:
                     file.write('\n')

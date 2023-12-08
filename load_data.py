@@ -124,7 +124,7 @@ def DeleteMedicine(y, threshold: int=250):
     return y
 
 
-def load_data_for_1_med(del_med_thres: int=0):
+def load_data_for_1_med(del_med_thres: int=0, random_seed: int =None):
     """
      Param
     -------
@@ -152,7 +152,7 @@ def load_data_for_1_med(del_med_thres: int=0):
     # drop 出現次數少於threshold 的藥in y
     y = DeleteMedicine(y, threshold=del_med_thres)
 
-    train_X, val_X, train_y, val_y = SplitBothXy_Df(X, y, 0.8)
+    train_X, val_X, train_y, val_y = SplitBothXy_Df(X, y, 0.8, random_state=random_seed)
 
 
     print("train_X.shape: ", train_X.shape)
@@ -174,7 +174,7 @@ def load_data_for_1_med(del_med_thres: int=0):
 
 
 
-def load_data_for_n_med(n: int=0, triain_all_med: bool=False, del_med_thres: int=0):
+def load_data_for_n_med(n: int=0, triain_all_med: bool=False, del_med_thres: int=0, random_seed: int =None):
     """
     Param
     -------
@@ -223,7 +223,7 @@ def load_data_for_n_med(n: int=0, triain_all_med: bool=False, del_med_thres: int
     # drop 出現次數少於threshold 的藥in y
     y = DeleteMedicine(y, threshold=del_med_thres)
 
-    train_X, val_X, train_y, val_y = SplitBothXy_Df(X, y, 0.8)
+    train_X, val_X, train_y, val_y = SplitBothXy_Df(X, y, 0.8, random_state=random_seed)
 
 
     print("train_X.shape: ", train_X.shape)
