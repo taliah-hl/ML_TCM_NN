@@ -27,7 +27,9 @@ conda install --yes --file requirements.txt
 |   |   |
 
 `df_predictions` =  probability of "has" that medicine (有該藥材)
+
 `all_class_binary_prediction_df` = predicted as 是否有該藥材
+
 `val_y` = ground truth of 是否有該藥材
 .
 
