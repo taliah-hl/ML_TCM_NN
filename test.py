@@ -8,4 +8,11 @@
 # from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 # import matplotlib.pyplot as plt
 
-print("done")
+a=1
+if a:
+    print(1)
+b=0
+if not b:
+    print(0)
+else:
+    print(0)
