@@ -73,4 +73,4 @@ def df_to_csv(df: pd.DataFrame, save_path:str=None, file_prefix: str='', textbox
 def print_df( df, title:str=None):
     if title is not None:
         print(title)
-    print("\n"+tabulate(df, headers='keys', tablefmt='psql', floatfmt=(".0f")))
+    print("\n"+tabulate(df, headers='keys', tablefmt='psql', floatfmt=(".4f")))
