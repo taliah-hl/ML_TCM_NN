@@ -12,7 +12,15 @@ def ReadData(FILENAME):
     return data
 
 def SplitXY(data, data_left_bound, label_left_bound, data_right_bound=None, label_right_bound=None):
-    """label_left_bound: 第一個藥材的col no."""
+    """
+    
+    label_left_bound: 第一個藥材的col no.
+    
+    Return
+    ----
+    X: pd.DataFrame
+    y: pd.DataFrame
+    """
     # Body status: 1~3, Diagnosis: 4~7, Symptom: 11~124
     # Prescription: 125~226
     # split_X = list(range(0, label_left_bound))
@@ -99,9 +107,9 @@ def SplitBothXy_Df(X: pd.DataFrame, y: pd.DataFrame, train_size: float, random_s
     random.shuffle(indices)
     val_idx = indices[:val_len]
     train_idx = indices[val_len:]
-    print("type of val_idx", type(val_idx))
-    print("type of train_idx", type(train_idx))
-    print("len of val_idx", len(val_idx))
+    #print("type of val_idx", type(val_idx))
+    #print("type of train_idx", type(train_idx))
+    print("in SplitBothXy_Df of load_data, len of val_idx", len(val_idx))
 
     X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
     y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
@@ -124,7 +132,7 @@ def DeleteMedicine(y, threshold: int=250):
     return y
 
 
-def load_data_for_1_med(del_med_thres: int=0, random_seed: int =None):
+def load_data_for_1_med(del_med_thres: int=0, random_seed: int =None, n:int=None):
     """
      Param
     -------
@@ -140,14 +148,20 @@ def load_data_for_1_med(del_med_thres: int=0, random_seed: int =None):
         if data_pd.columns.tolist()[i] == first_medicane:
             first_medicine_idx = i
             break
-    print("first_medicine: ",data_pd.columns[first_medicine_idx])
-    print("first_medicine_idx: ", first_medicine_idx)
-    print("should be 麻黃")
+    assert(data_pd.columns[first_medicine_idx] == first_medicane)   # check del med 前第一隻藥是否'麻黃'
+
+    if n is not None:
+        right_bd = first_medicine_idx + n
+    else:
+        right_bd=None
 
     # split data into X and y
     # x= all symptoms, diagnosis, body status
     # y= all medince
-    X,y = SplitXY(data_pd, data_left_bound=2, data_right_bound=first_medicine_idx, label_left_bound=first_medicine_idx)
+    X,y = SplitXY(data_pd, data_left_bound=2, 
+                  data_right_bound=first_medicine_idx, 
+                  label_left_bound=first_medicine_idx,
+                    label_right_bound=right_bd)
 
     # drop 出現次數少於threshold 的藥in y
     y = DeleteMedicine(y, threshold=del_med_thres)
@@ -206,8 +220,7 @@ def load_data_for_n_med(n: int=0, triain_all_med: bool=False, del_med_thres: int
             break
 
     assert(data_pd.columns[first_medicine_idx] == first_medicane)
-
-
+    
     if triain_all_med:
         right_bd = None
     else:
@@ -250,3 +263,84 @@ def load_data_for_n_med(n: int=0, triain_all_med: bool=False, del_med_thres: int
     print("number of medicine in y: ", train_y.shape[1])
 
     return (X_np, train_X, X_val_np, val_X, y_np, train_y, y_val_np, val_y, num_col_x, num_medic)
+
+
+
+def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None, n:int=None):
+    """
+     Param
+    -------
+    del_med_thres: 出現次數少於del_med_thres會被刪除,如不想delete , set this to 0
+    
+    """
+    data_pd = ReadData("./simplified_data/simplified_data2.csv")
+    first_medicine_idx = None
+    #first_medicine_idx = 113
+    first_medicane = '麻黃'
+
+    for i in range(len(data_pd.columns.tolist())):
+        if data_pd.columns.tolist()[i] == first_medicane:
+            first_medicine_idx = i
+            break
+    
+    if n is not None:
+        right_bd = first_medicine_idx + n
+    else:
+        right_bd=None
+
+
+    # split data into X and y
+    # x= all symptoms, diagnosis, body status
+    # y= all medince
+    X,y = SplitXY(data_pd, data_left_bound=2, data_right_bound=first_medicine_idx, label_left_bound=first_medicine_idx, label_right_bound=right_bd)
+    
+    print("=======================")
+    print("\nin load_data_for_1_med_with_debug of load_data.py, random_seed=", random_seed)
+    #### debug no. of 0 and 1
+    counts = pd.Series(y.values.flatten()).value_counts()
+    num_1 = counts.get(1, 0)
+    num_0 = counts.get(0, 0)
+    
+    print("after SplitXY, total number of 0, 1 in y:")
+    print("no. of 1:", num_1)
+    print("no. of 0:", num_0)
+    
+
+    # drop 出現次數少於threshold 的藥in y
+    y = DeleteMedicine(y, threshold=del_med_thres)
+
+    train_X, val_X, train_y, val_y = SplitBothXy_Df(X, y, 0.8, random_state=random_seed)
+
+
+    print("train_X.shape: ", train_X.shape)
+    print("train_y.shape: ", train_y.shape)
+    
+    X_np = train_X.values.astype('float64')
+    X_val_np = val_X.values.astype('float64')
+    # print("X transformed to np array")
+    # print("type of X_np:", type(X_np))
+    # print("shape of X_np:", X_np.shape)
+    # print("shape of train y:", train_y.shape)
+    # print("type of X_val_np:", type(X_val_np))
+    # print("shape of X_val_np:", X_val_np.shape)
+    num_col_x = X_np.shape[1]
+    # print("number of col in (train) x:",num_col_x)
+    # print("number of medicine in y: ", train_y.shape[1])
+    # print("= = = = ===== = = =")
+    print("\ndebug no, of 0 and 1 in y after Split trina val")
+    
+    counts_trainy = pd.Series(train_y.values.flatten()).value_counts()
+    num_1_trainy = counts_trainy.get(1, 0)
+    num_0_trainy = counts_trainy.get(0, 0)
+
+    counts_valy = pd.Series(val_y.values.flatten()).value_counts()
+    num_1_valy = counts_valy.get(1, 0)
+    num_0_valy = counts_valy.get(0, 0)
+
+    print("no. of 1 in train_y:", num_1_trainy)
+    print("no. of 0 in train_y:", num_0_trainy)
+    print("no. of 1 in val_y:", num_1_valy)
+    print("no. of 0 in val_y:", num_0_valy)
+
+
+    return (X_np, X_val_np, train_y, val_y,  num_col_x, num_1_valy, num_0_valy)

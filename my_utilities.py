@@ -22,17 +22,23 @@ def dict_to_txt(dictToPrint: dict,  save_path:str=None, file_prefix: str='', tex
         save_path_norepeat += '.txt'
 
         with open(save_path_norepeat, 'w', encoding='utf-8') as file:
-            try:
-                json.dump(dictToPrint, file, indent=2)
+            # try:
+            #     json.dumps(dictToPrint)
+            #     json.dump(dictToPrint, file, indent=2)
                 
-            except:
-                print("cannot dump dictToPrint, use normal print")
+            # except:
+            #     print("cannot dump dictToPrint, use normal print")
             
-                old_stdout = sys.stdout
-                sys.stdout = file
-                print(dictToPrint)
-                sys.stdout = old_stdout  # Reset stdout to default (console)
-     
+            #     old_stdout = sys.stdout
+            #     sys.stdout = file
+            #     print(dictToPrint)
+            #     sys.stdout = old_stdout  # Reset stdout to default (console)
+            # 
+            old_stdout = sys.stdout
+            sys.stdout = file
+            print(dictToPrint)
+            sys.stdout = old_stdout  # Reset stdout to default (console) 
+            # can't use sys.stdout = sys.__stdout__  in jupyter notebook!!! will cause error!!
             try:
                 if textbox is not None:
                     file.write('\n')
