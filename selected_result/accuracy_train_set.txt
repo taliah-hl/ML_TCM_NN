@@ -1,0 +1,3 @@
+{'TP': 2230, 'FP': 1070, 'FN': 4754, 'TN': 56920, 'TP_percentage': 0.03432142087604272, 'FP_percentage': 0.01646812571182319, 'FN_percentage': 0.0731677286299135, 'TN_percentage': 0.8760427247822206, 'overall_f1': 0.43368339167639053, 'precision': 0.6757575757575758, 'recall': 0.3193012600229095}
+
+train setmodel layer: 16-32-32-2, epoch=100, batch_size=32,  activation=relu, num_med:all, del_med_under_thres=0

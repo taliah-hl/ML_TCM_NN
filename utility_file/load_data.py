@@ -266,14 +266,16 @@ def load_data_for_n_med(n: int=0, triain_all_med: bool=False, del_med_thres: int
 
 
 
-def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None, n:int=None):
+def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None, n:int=None, file_name:str=None):
     """
      Param
     -------
     del_med_thres: 出現次數少於del_med_thres會被刪除,如不想delete , set this to 0
     
     """
-    data_pd = ReadData("./simplified_data/simplified_data2.csv")
+    file_name = "./simplified_data/simplified_data2.csv" if file_name is None else file_name
+    
+    data_pd = ReadData(file_name)
     first_medicine_idx = None
     #first_medicine_idx = 113
     first_medicane = '麻黃'
