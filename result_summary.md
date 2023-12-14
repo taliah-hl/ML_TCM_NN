@@ -31,9 +31,9 @@
 ```
 
 - train set:
-  - train set model layer: 16 - 32 - 32 - 2, epoch = 100, batch_size = 32, activation = relu, num_med: all, del_med_under_thres = 0  
+  - train set model layer: 16 - 32 - 32 - 2, epoch = 100, batch_size = 32, activation = relu, num_med: all, del_med_under_thres = 0
   ```
-  {
+   {
     'TP': 2230,
     'FP': 1070,
     'FN': 4754,
@@ -45,8 +45,11 @@
     'overall_f1': 0.43368339167639053,
     'precision': 0.6757575757575758,
     'recall': 0.3193012600229095
-}
+  }
   ```
+  
+ 
+
 
 ## 1000 epoch
 
