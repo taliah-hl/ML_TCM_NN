@@ -276,14 +276,16 @@ def load_data_for_n_med(n: int=0, triain_all_med: bool=False, del_med_thres: int
 
 
 
-def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None, n:int=None):
+def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None, n:int=None, file_name:str=None):
     """
      Param
     -------
     del_med_thres: 出現次數少於del_med_thres會被刪除,如不想delete , set this to 0
     
     """
-    data_pd = ReadData("./simplified_data/simplified_data2.csv")
+    file_name = "./simplified_data/simplified_data2.csv" if file_name is None else file_name
+    
+    data_pd = ReadData(file_name)
     first_medicine_idx = None
     #first_medicine_idx = 113
     first_medicane = '麻黃'
@@ -319,6 +321,8 @@ def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None,
 
     train_X, val_X, train_y, val_y = SplitBothXy_Df(X, y, 0.8, random_state=random_seed)
 
+    # caluculate number of 0 and 1 in train_X
+    save_num_med_of_data(train_y)
 
     print("Train_X.shape: ", train_X.shape)
     print("Train_y.shape: ", train_y.shape)
@@ -349,5 +353,21 @@ def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None,
     print("Number of 0s in val_y:", num_0_valy)
     print("Number of 1s val_y:", num_1_valy)
 
+
     print("--------------------------------------------------------------------------------")
     return (X_np, X_val_np, train_y, val_y,  num_col_x, num_1_valy, num_0_valy)
+
+
+def save_num_med_of_data(train_X: pd.DataFrame):
+    # create a empty df named med_cnt
+    med_cnt = pd.DataFrame(columns=['med_name', 'count of 1', 'count of 0'])
+    for i in range(len(train_X.columns)):
+        counts = train_X.iloc[:, i].value_counts()
+        num_1 = counts.get(1, 0)
+        num_0 = counts.get(0, 0)
+        med_cnt.loc[i] = [train_X.columns[i], num_1, num_0]
+    med_cnt.to_csv('./simplified_data/med_cnt.csv', index=False)
+
+    print("save med num done")
+
+
