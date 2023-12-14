@@ -6,9 +6,11 @@ RAND_SEED = 42
 
 def ReadData(FILENAME):
     data = pd.read_csv(FILENAME, encoding='ANSI')
-    print("in ReadData")
-    print("type of data:", type(data))
+    print("--------------------------------------------------------------------------------")
+    print("ReadData:")
+    print("Type of data:", type(data))
     print(f'Shape of data = ({data.shape[0]} rows, {data.shape[1]} cols).')
+    print("End of ReadData")
     return data
 
 def SplitXY(data, data_left_bound, label_left_bound, data_right_bound=None, label_right_bound=None):
@@ -33,11 +35,15 @@ def SplitXY(data, data_left_bound, label_left_bound, data_right_bound=None, labe
     y = data.iloc[1:, list(range(label_left_bound, label_right_bound))]
     
     # Debug
+    print("--------------------------------------------------------------------------------")
     print("SplitXY:")
-    print(f'Shape of X = ({X.shape[0]} rows, {X.shape[1]} cols). First 10 data of X:')
-    print(X.iloc[:10, :10])
-    print(f'Shape of y = ({y.shape[0]} rows, {y.shape[1]} cols). First 10 data of y:')
-    print(y.iloc[:10, :10])
+    print(f'Shape of X = ({X.shape[0]} rows, {X.shape[1]} cols).')
+    # print("First 10 data of X:")
+    # print(X.iloc[:10, :10])
+    print(f'Shape of y = ({y.shape[0]} rows, {y.shape[1]} cols).')
+    # print("First 10 data of y:")
+    # print(y.iloc[:10, :10])
+    print("End of SplitXY")
     return X, y
 
 def SplitNparr(original_arr: np.ndarray, train_portion: float)->tuple:
@@ -109,7 +115,8 @@ def SplitBothXy_Df(X: pd.DataFrame, y: pd.DataFrame, train_size: float, random_s
     train_idx = indices[val_len:]
     #print("type of val_idx", type(val_idx))
     #print("type of train_idx", type(train_idx))
-    print("in SplitBothXy_Df of load_data, len of val_idx", len(val_idx))
+    # print("--------------------------------------------------------------------------------")
+    # print("SplitBothXy_Df, len of val_idx = ", len(val_idx))
 
     X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
     y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
@@ -120,6 +127,8 @@ def SplitBothXy_Df(X: pd.DataFrame, y: pd.DataFrame, train_size: float, random_s
     return X_train, X_val, y_train, y_val
 
 def DeleteMedicine(y, threshold: int=250):
+    if threshold == 0:
+        return y
     """
         delete 出現次數< threshold 的藥
     """
@@ -128,6 +137,7 @@ def DeleteMedicine(y, threshold: int=250):
         if y[col].sum() < threshold:
             y = y.drop(col, axis=1)
     # Debug
+    print("--------------------------------------------------------------------------------")
     print(f'DeleteMedicine: shape of y is {y.shape}.')
     return y
 
@@ -294,26 +304,24 @@ def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None,
     # y= all medince
     X,y = SplitXY(data_pd, data_left_bound=2, data_right_bound=first_medicine_idx, label_left_bound=first_medicine_idx, label_right_bound=right_bd)
     
-    print("=======================")
-    print("\nin load_data_for_1_med_with_debug of load_data.py, random_seed=", random_seed)
+    print("--------------------------------------------------------------------------------")
+    print("In load_data_for_1_med_with_debug of load_data.py, random_seed=", random_seed)
     #### debug no. of 0 and 1
     counts = pd.Series(y.values.flatten()).value_counts()
     num_1 = counts.get(1, 0)
     num_0 = counts.get(0, 0)
+    print("After SplitXY, total number of 0, 1 in y:")
+    print("Number of 0s:", num_0)
+    print("Number of 1s:", num_1)
     
-    print("after SplitXY, total number of 0, 1 in y:")
-    print("no. of 1:", num_1)
-    print("no. of 0:", num_0)
-    
-
     # drop 出現次數少於threshold 的藥in y
     y = DeleteMedicine(y, threshold=del_med_thres)
 
     train_X, val_X, train_y, val_y = SplitBothXy_Df(X, y, 0.8, random_state=random_seed)
 
 
-    print("train_X.shape: ", train_X.shape)
-    print("train_y.shape: ", train_y.shape)
+    print("Train_X.shape: ", train_X.shape)
+    print("Train_y.shape: ", train_y.shape)
     
     X_np = train_X.values.astype('float64')
     X_val_np = val_X.values.astype('float64')
@@ -326,8 +334,7 @@ def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None,
     num_col_x = X_np.shape[1]
     # print("number of col in (train) x:",num_col_x)
     # print("number of medicine in y: ", train_y.shape[1])
-    # print("= = = = ===== = = =")
-    print("\ndebug no, of 0 and 1 in y after Split trina val")
+    print("\nSplit Training Validation")
     
     counts_trainy = pd.Series(train_y.values.flatten()).value_counts()
     num_1_trainy = counts_trainy.get(1, 0)
@@ -337,10 +344,10 @@ def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None,
     num_1_valy = counts_valy.get(1, 0)
     num_0_valy = counts_valy.get(0, 0)
 
-    print("no. of 1 in train_y:", num_1_trainy)
-    print("no. of 0 in train_y:", num_0_trainy)
-    print("no. of 1 in val_y:", num_1_valy)
-    print("no. of 0 in val_y:", num_0_valy)
+    print("Number of 0s in train_y:", num_0_trainy)
+    print("Number of 1s train_y:", num_1_trainy)
+    print("Number of 0s in val_y:", num_0_valy)
+    print("Number of 1s val_y:", num_1_valy)
 
-
+    print("--------------------------------------------------------------------------------")
     return (X_np, X_val_np, train_y, val_y,  num_col_x, num_1_valy, num_0_valy)
