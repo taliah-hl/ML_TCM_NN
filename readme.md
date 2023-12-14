@@ -1,12 +1,18 @@
 # NN Model for TCM Project (Group 13)
 
-## install packages
-run
-```
-pip install -r requirements.txt
-# if use conda
-conda install --yes --file requirements.txt
-```
+## 12/12 新方向
+1. 睇f1 高分的藥有什麼特徵 -> e.g. 0 & 1比例
+2. 比較TP, FP, TN,FN of train set and val set
+3. 用xx 湯去train? ->只有9X個有藥方 -> 而且沒什麼重複的
+4. reduce dimension of X (feature)??? 
+
+## Read this files (have meaningful result?)
+
+- [one_medicine_compare_train_val_v2.ipynb](one_medicine_compare_train_val_v2.ipynb)
+
+### print accuracy and loss tutorial
+https://machinelearningmastery.com/display-deep-learning-model-training-history-in-keras/
+
 ## fisrt runnable version with super simplified data
 
 `cnn_simplfied_data1.ipynb`
@@ -37,6 +43,14 @@ conda install --yes --file requirements.txt
 `all_class_binary_prediction_df` = predicted as 是否有該藥材
 
 `val_y` = ground truth of 是否有該藥材
+
+## install packages
+run
+```
+pip install -r requirements.txt
+# if use conda
+conda install --yes --file requirements.txt
+```
 .
 
 .
