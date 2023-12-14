@@ -313,6 +313,8 @@ def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None,
 
     train_X, val_X, train_y, val_y = SplitBothXy_Df(X, y, 0.8, random_state=random_seed)
 
+    # caluculate number of 0 and 1 in train_X
+    save_num_med_of_data(train_y)
 
     print("train_X.shape: ", train_X.shape)
     print("train_y.shape: ", train_y.shape)
@@ -346,3 +348,16 @@ def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None,
 
 
     return (X_np, X_val_np, train_y, val_y,  num_col_x, num_1_valy, num_0_valy)
+
+def save_num_med_of_data(train_X: pd.DataFrame):
+    # create a empty df named med_cnt
+    med_cnt = pd.DataFrame(columns=['med_name', 'count of 1', 'count of 0'])
+    for i in range(len(train_X.columns)):
+        counts = train_X.iloc[:, i].value_counts()
+        num_1 = counts.get(1, 0)
+        num_0 = counts.get(0, 0)
+        med_cnt.loc[i] = [train_X.columns[i], num_1, num_0]
+    med_cnt.to_csv('./simplified_data/med_cnt.csv', index=False)
+
+    print("save med num done")
+
