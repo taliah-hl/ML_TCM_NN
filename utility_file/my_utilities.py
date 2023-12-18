@@ -80,3 +80,19 @@ def print_df( df, title:str=None):
     if title is not None:
         print(title)
     print("\n"+tabulate(df, headers='keys', tablefmt='psql', floatfmt=(".4f")))
+
+
+def get_figure_save_path(path_prefix: str):
+    graph_dir='./result/graph/'
+    if not os.path.isdir(graph_dir):
+        os.makedirs(graph_dir)
+    graph_dir += ("/" + path_prefix)
+    add_num =1
+    dir_norepeat = graph_dir
+    while os.path.isfile(f'{dir_norepeat}.png'):
+        dir_norepeat = graph_dir + f'_{add_num}'
+        add_num +=1
+    dir_norepeat += '.png'
+
+    return dir_norepeat
+     

@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import random
+from sklearn.preprocessing import LabelEncoder
 
 RAND_SEED = 42
 
@@ -276,29 +277,41 @@ def load_data_for_n_med(n: int=0, triain_all_med: bool=False, del_med_thres: int
 
 
 
-def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None, n:int=None, file_name:str=None):
+def load_data_for_1_med_with_debug(del_med_thres: int=0, random_seed: int =None, n:int=None, 
+                                   file_name:str=None, only_specific_med: str=None, use_text_convert: bool=False):
     """
      Param
     -------
     del_med_thres: 出現次數少於del_med_thres會被刪除,如不想delete , set this to 0
+    only_specific_med: only train this medicine
     
     """
     file_name = "./simplified_data/simplified_data2.csv" if file_name is None else file_name
     
     data_pd = ReadData(file_name)
+    if use_text_convert:
+        data_pd = TextConvert(data_pd)
     first_medicine_idx = None
     #first_medicine_idx = 113
     first_medicane = '麻黃'
+    chosen_medicane_idx = None
 
     for i in range(len(data_pd.columns.tolist())):
         if data_pd.columns.tolist()[i] == first_medicane:
             first_medicine_idx = i
             break
-    
-    if n is not None:
-        right_bd = first_medicine_idx + n
+    if(isinstance(only_specific_med, str)):
+        for i in range(len(data_pd.columns.tolist())):
+            if data_pd.columns.tolist()[i] == only_specific_med:
+                chosen_medicane_idx = i
+                break
+    if chosen_medicane_idx is None:
+        if n is not None:
+            right_bd = first_medicine_idx + n
+        else:
+            right_bd=None
     else:
-        right_bd=None
+        right_bd = chosen_medicane_idx + 1
 
 
     # split data into X and y
@@ -371,3 +384,16 @@ def save_num_med_of_data(train_X: pd.DataFrame):
     print("save med num done")
 
 
+def TextConvert(data, left_idx: int =1, right_idx:int=7):
+    # Converting: 1~7 (Body status + Diagnosis)
+    label_encoder = LabelEncoder()
+    categorical_columns = list(range(left_idx, right_idx+1))
+    for i in categorical_columns:
+        data.iloc[:, i] = label_encoder.fit_transform(data.iloc[:, i])
+    data = drop_column(data)
+    return data
+
+def drop_column(data, left_idx: int =8, right_idx:int=10):
+    # drop: 1~7 (Body status + Diagnosis)
+    data = data.drop(data.columns[list(range(left_idx, right_idx+1))], axis=1)
+    return data
